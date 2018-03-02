@@ -8,19 +8,34 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 class ThreadsTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function setUp()
+    {
+        parent::setUp();
+        $this->thread = factory('App\Thread')->create();
+
+    }
+
     /** @test */
     public function a_user_can_browse_threads()
     {
-        $thread = factory('App\Thread')->create();
         $response = $this->get('/threads');
-        $response->assertSee($thread->title);
+        $response->assertSee($this->thread->title);
     }
 
     /** @test */
     public function a_user_can_read_thread()
     {
-        $thread = factory('App\Thread')->create();
-        $response = $this->get('/threads/' . $thread->id);
-        $response->assertSee($thread->title);
+        $response = $this->get('/threads/' . $this->thread->id);
+        $response->assertSee($this->thread->title);
+    }
+
+    /** @test */
+    public function a_thread_should_have_a_reply_to_show()
+    {
+        $reply = factory('App\Reply')->create(['thread_id' => $this->thread->id]);
+        $response = $this->get('/threads/' . $this->thread->id);
+        $response->assertSee($reply->body);
+
     }
 }
