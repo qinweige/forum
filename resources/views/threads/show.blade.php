@@ -22,6 +22,16 @@
                 @include('threads.reply');
         @endforeach
         </div>
-
+        @if (auth()->check())
+            <form method="POST" action="/threads/{{ $thread->id }}/replies">
+                {{ csrf_field() }}
+                <div class="form-group">
+                    <textarea name="body" id="body" class="form-control" rows="5" placeholder="put your reply here"></textarea>
+                </div>
+                <button id="submit" type="submit" class="btn btn-success">Submit</button>
+            </form>
+        @else
+        <p class="text-center"><a class="text-center" href="{{ route('login') }}">login</a> to post your reply.</p>
+        @endif
     </div>
 @endsection
