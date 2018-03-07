@@ -12,7 +12,7 @@ class ThreadsTest extends TestCase
     public function setUp()
     {
         parent::setUp();
-        $this->thread = factory('App\Thread')->create();
+        $this->thread = create('App\Thread');
 
     }
 
@@ -33,7 +33,7 @@ class ThreadsTest extends TestCase
     /** @test */
     public function a_thread_should_have_a_reply_to_show()
     {
-        $reply = factory('App\Reply')->create(['thread_id' => $this->thread->id]);
+        $reply = create('App\Reply', ['thread_id' => $this->thread->id]);
         $response = $this->get('/threads/' . $this->thread->id);
         $response->assertSee($reply->body);
 
