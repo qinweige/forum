@@ -24,7 +24,5 @@ class CreateTheThreadTest extends TestCase
         $this->expectException('Illuminate\Auth\AuthenticationException');
         $thread = factory('App\Thread')->make();
         $this->post('/threads', $thread->toArray());
-        $this->get('/threads/' . $thread->id)
-            ->assertSee($thread->title);
     }
 }

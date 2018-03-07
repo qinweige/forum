@@ -36,6 +36,10 @@ class ThreadsTest extends TestCase
         $reply = create('App\Reply', ['thread_id' => $this->thread->id]);
         $response = $this->get('/threads/' . $this->thread->id);
         $response->assertSee($reply->body);
-
+    }
+    /** @test */
+    public function unauthorized_user_can_not_see_form()
+    {
+        $this->withExceptionHandling()->get('/threads/create')->assertRedirect('/login');
     }
 }
