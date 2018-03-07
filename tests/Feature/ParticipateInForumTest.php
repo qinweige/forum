@@ -13,10 +13,9 @@ class ParticipateInForumTest extends TestCase
     /** @test */
     public function a_user_can_reply_to_thread()
     {
-        $user = factory('App\User')->create();
-        $this->be($user);
-        $thread = factory('App\Thread')->create();
-        $reply = factory('App\Reply')->make();
+        $this->signin();
+        $thread = create('App\Thread');
+        $reply = make('App\Reply');
 
         $this->post('threads/'. $thread->id . '/replies', $reply->toArray());
         $this->get($thread->path())
