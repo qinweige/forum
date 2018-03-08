@@ -26,7 +26,7 @@ class ThreadsTest extends TestCase
     /** @test */
     public function a_user_can_read_thread()
     {
-        $response = $this->get('/threads/' . $this->thread->id);
+        $response = $this->get($this->thread->path());
         $response->assertSee($this->thread->title);
     }
 
@@ -34,12 +34,19 @@ class ThreadsTest extends TestCase
     public function a_thread_should_have_a_reply_to_show()
     {
         $reply = create('App\Reply', ['thread_id' => $this->thread->id]);
-        $response = $this->get('/threads/' . $this->thread->id);
+        $response = $this->get($this->thread->path());
         $response->assertSee($reply->body);
     }
     /** @test */
     public function unauthorized_user_can_not_see_form()
     {
         $this->withExceptionHandling()->get('/threads/create')->assertRedirect('/login');
+    }
+
+    /** @test */
+    public function thread_path()
+    {
+        $this->assertEquals("/threads/{$this->thread->channel->slug}/{$this->thread->id}",
+            $this->thread->path());
     }
 }

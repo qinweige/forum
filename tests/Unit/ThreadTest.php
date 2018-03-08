@@ -39,4 +39,10 @@ class ThreadTest extends TestCase
         );
         $this->assertCount(1, $this->thread->replies);
     }
+
+    /** @test */
+    public function thread_get_channel()
+    {
+        $this->assertInstanceOf('App\Channel', $this->thread->channel);
+    }
 }

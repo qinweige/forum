@@ -15,12 +15,10 @@ class ParticipateInForumTest extends TestCase
     {
         $this->signin();
         $thread = create('App\Thread');
-        $reply = make('App\Reply');
-
-        $this->post('threads/'. $thread->id . '/replies', $reply->toArray());
+        $reply = make('App\Reply', array('title'=>null));
+        $this->post($thread->path() . '/replies', $reply->toArray());
         $this->get($thread->path())
             ->assertSee($reply->body);
-
     }
 
     /** @test */
@@ -30,6 +28,6 @@ class ParticipateInForumTest extends TestCase
         $user = factory('App\User')->create();
         $thread = factory('App\Thread')->create();
         $reply = factory('App\Reply')->make();
-        $this->post('threads/'. $thread->id . '/replies', $reply->toArray());
+        $this->post($thread->path() . '/replies', $reply->toArray());
     }
 }
