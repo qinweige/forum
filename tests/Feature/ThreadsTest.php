@@ -49,4 +49,16 @@ class ThreadsTest extends TestCase
         $this->assertEquals("/threads/{$this->thread->channel->slug}/{$this->thread->id}",
             $this->thread->path());
     }
+
+    /** @test */
+    public function a_channel_should_have_its_threads()
+    {
+        $channel = create('App\Channel');
+        $threadInChannel = create('App\Thread', ['channel_id' => $channel->id]);
+        $threadNotInChannel = create('App\Thread');
+
+        $this->get('/threads/'. $channel->slug)
+            ->assertSee($threadInChannel->title)
+            ->assertDontSee($threadNotInChannel->title);
+    }
 }
