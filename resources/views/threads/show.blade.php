@@ -23,7 +23,7 @@
         @endforeach
         </div>
         @if (auth()->check())
-            <form method="POST" action="/threads/{{ $thread->id }}/replies">
+            <form method="POST" action="{{$thread->path() . '/replies'}}">
                 {{ csrf_field() }}
                 <div class="form-group">
                     <textarea name="body" id="body" class="form-control" rows="5" placeholder="put your reply here"></textarea>

@@ -15,7 +15,7 @@
                                 <label for="channel_id">choose a channel</label>
                                 <select for="channel_id"  name="channel_id" id="channel_id" class="form-control">
                                     <option value="null">choose a channel</option>
-                                    @foreach (App\Channel::all() as $channel)
+                                    @foreach ($channels as $channel)
                                         <option value="{{$channel->id}}" {{old('channel_id')== $channel->id?'selected':''}}>{{$channel->slug}}</option>
                                         @endforeach
                                 </select>
