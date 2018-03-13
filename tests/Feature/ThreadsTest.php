@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Contracts\Auth\Authenticatable as UserContract;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -60,5 +61,17 @@ class ThreadsTest extends TestCase
         $this->get('/threads/'. $channel->slug)
             ->assertSee($threadInChannel->title)
             ->assertDontSee($threadNotInChannel->title);
+    }
+
+    /** @test */
+    public function get_my_threads()
+    {
+        $this->signIn(create('App\User', ['name'=>'weige']));
+        $threadsByWeige = create('App\Thread', ['user_id'=>auth()->id()]);
+        $threadByOther = create('App\Thread');
+
+        $this->get('/threads?by=weige')
+            ->assertSee($threadsByWeige->title)
+            ->assertDontSee($threadByOther->title);
     }
 }

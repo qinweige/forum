@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Thread;
 use App\Channel;
 use Illuminate\Http\Request;
+use App\Filters\ThreadsFilter;
 
 class ThreadsController extends Controller
 {
@@ -20,15 +21,21 @@ class ThreadsController extends Controller
      * @param Channel $channel
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index($channelSlug = null)
+    public function index($channelSlug = null, ThreadsFilter $filter)
     {
+        $threads = $this->getThreads($channelSlug, $filter);
+
+        return view('threads.index', compact('threads'));
+    }
+
+    public function getThreads($channelSlug = null, ThreadsFilter $filter)
+    {
+        $threads = Thread::latest()->filter($filter);
         if ($channelSlug != null) {
             $channelId = Channel::where('slug', $channelSlug)->get()->first()->id;
-            $threads = Thread::where('channel_id', $channelId)->latest()->get();
-        } else {
-            $threads = Thread::latest()->get();
+            $threads->where('channel_id', $channelId)->latest();
         }
-        return view('threads.index', compact('threads'));
+        return $threads->get();
     }
 
 
