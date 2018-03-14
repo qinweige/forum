@@ -45,4 +45,17 @@ class ThreadTest extends TestCase
     {
         $this->assertInstanceOf('App\Channel', $this->thread->channel);
     }
+
+    /** @test */
+    public function thread_can_browse_by_popularity()
+    {
+        $threadWithTwoReply = create('App\Thread');
+        create('App\Reply', ['thread_id' => $threadWithTwoReply->id], 2);
+        $threadWithThreeReply = create('App\Thread');
+        create('App\Reply', ['thread_id' => $threadWithThreeReply->id], 3);
+        $threadWithNoReply = $this->thread;
+
+        $response = $this->getJson('/threads?popular=1')->json();
+        $this->assertEquals([3, 2, 0], array_column($response, 'replies_count'));
+    }
 }
